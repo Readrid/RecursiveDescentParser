@@ -38,7 +38,7 @@ class LexerLog(object):
 
     def getColumn(self):
         if not self.lexer.token():
-            dop = len(self.tok.value) - 1
+            dop = len(self.tok.value)
         else:
             dop = 0
         line_start = self.data.rfind('\n', 0, self.tok.lexpos) + 1
@@ -59,4 +59,4 @@ class LexerLog(object):
             self.tok = self.lexer.token()
             if not self.tok:
                 break
-            print(self.tok, self.getColumn(), sep=' ')
+            print(self.tok, sep=' ')

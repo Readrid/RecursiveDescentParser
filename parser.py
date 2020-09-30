@@ -4,7 +4,6 @@ class Parser(object):
     def __init__(self, data):
         self.lex = LexerLog(data)
         self.curTok = self.lex.getNextTok()
-        #self.lex.test()
 
     def accept(self, t):
         if self.curTok == t:
@@ -18,9 +17,10 @@ class Parser(object):
     def Rel(self):
         if self.accept('ID'):
             if self.accept('CORKSCREW'):
-                res = self.Disj()
+                if not self.Disj():
+                    return False
                 if self.accept('DOT'):
-                    return res
+                    return True
                 return False
             if self.accept('DOT'):
                 return True
@@ -30,22 +30,25 @@ class Parser(object):
         if self.accept('ID'):
             return True
         if self.accept('LPAREN'):
-            res = self.Disj()
+            if not self.Disj():
+                return False
             if self.accept('RPAREN'):
-                return res
+                return True
             return False
 
     def Disj(self):
-        res = self.Conj()
+        if not self.Conj():
+            return False
         if self.accept('DISJ'):
             return self.Disj()
-        return res
+        return True
 
     def Conj(self):
-        res = self.ID()
+        if not self.ID():
+            return False
         if self.accept('CONJ'):
             return self.Conj()
-        return res
+        return True
 
     def parse(self):
         while True:
